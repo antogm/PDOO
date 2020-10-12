@@ -30,9 +30,8 @@ public class MazoSorpresas {
         debug = b;
         init();
         
-        if (debug){
+        if (debug)
             Diario.getInstance().ocurreEvento("Se ha activado el modo debug del MazoSorpresas");
-        }
     }
     
     void alMazo (Sorpresa s){

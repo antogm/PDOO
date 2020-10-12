@@ -39,6 +39,10 @@ public class Tablero{
             return false;
     }
     
+    /**
+     * Consultor para el atributo numCasillaCarcel
+     * @return número entero donde se ubica la cárcel en el tablero
+     */
     int getCarcel(){
         return numCasillaCarcel;
     }
@@ -69,7 +73,7 @@ public class Tablero{
     
     void añadeJuez( ){
         if (!tieneJuez){
-            Casilla temp = new Casilla("Juez");
+            Casilla temp = new Casilla(numCasillaCarcel, "JUEZ");
             casillas.add(temp);
             tieneJuez = true;
         }

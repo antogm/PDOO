@@ -6,7 +6,7 @@ enum TipoCasilla{
     JUEZ,
     IMPUESTO,
     DESCANSO
-};
+}
 
 enum TipoSorpresa{
     IRCARCEL,
@@ -15,7 +15,7 @@ enum TipoSorpresa{
     PORCASAHOTEL,
     PORJUGADOR,
     SALIRCARCEL
-};
+}
 
 enum EstadosJuego {
     INICIO_TURNO,
@@ -23,5 +23,13 @@ enum EstadosJuego {
     DESPUES_AVANZAR,
     DESPUES_COMPRAR,
     DESPUES_GESTIONAR
+}
+
+enum OperacionesJuego {
+    PASAR_TURNO,
+    SALIR_CARCEL,
+    AVANZAR,
+    COMPRAR,
+    GESTIONAR
 }
 
