@@ -129,7 +129,6 @@ public class CivitasJuego {
         int numCasillaCarcel = 5;
         tablero = new Tablero(numCasillaCarcel);
         
-        tablero.añadeCasilla(new Casilla("SALIDA"));
         tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle1", 10, 1.1f, 500, 600, 250)));
         tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle2", 10, 1.1f, 500, 600, 250)));
         tablero.añadeCasilla(new Casilla(mazo, "Sorpresa1"));

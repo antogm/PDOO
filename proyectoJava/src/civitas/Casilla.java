@@ -31,26 +31,25 @@ public class Casilla {
         tituloPropiedad = titulo;
     }
     
-    Casilla (float cantidad, String nombre){    // impuesto
+    Casilla (float cantidad, String s){    // impuesto
         init();
         tipo = TipoCasilla.IMPUESTO;
         importe = cantidad;
-        nombre = "Impuesto";
+        nombre = s;
     }
     
-    Casilla (int numCasillaCarcel, String nombre){   // juez
+    Casilla (int numCasillaCarcel, String s){   // juez
         init();
         tipo = TipoCasilla.JUEZ;
         carcel = numCasillaCarcel;
-        nombre = "Juez";
+        nombre = s;
     }
     
-    Casilla (MazoSorpresas _mazo, String _nombre){    // sorpresa
+    Casilla (MazoSorpresas m, String s){    // sorpresa
         init();
         tipo = TipoCasilla.SORPRESA;
-        mazo = _mazo;
-        nombre = _nombre;
-        nombre = "Sorpresa";
+        mazo = m;
+        nombre = s;
     }
     
     public String getNombre(){

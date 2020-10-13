@@ -17,7 +17,7 @@ class Tablero
     @tieneJuez = false
     
     # Añade la casilla de salida
-    salida = Casilla.new("Salida")
+    salida = Casilla.new_DESCANSO("SALIDA")
     @casillas.push(salida)
   end
   
@@ -32,18 +32,18 @@ class Tablero
   def añade_casilla(c)
     num_casillas = @casillas.length
     if (num_casillas == @numCasillaCarcel)
-      @casillas.push(Casilla.new("Cárcel"))
+      @casillas.push(Casilla.new_DESCANSO("Cárcel"))
     end
     
     @casillas.push(c)
     if (num_casillas == @numCasillaCarcel)
-      @casillas.push(Casilla.new("Cárcel"))
+      @casillas.push(Casilla.new_DESCANSO("Cárcel"))
     end
   end
   
   def añade_juez
     if !@tieneJuez
-      @casillas.push(Casilla.new("Juez"))
+      @casillas.push(Casilla.new_JUEZ(@numCasillaCarcel, "JUEZ"))
       @tieneJuez = true
     end
   end
