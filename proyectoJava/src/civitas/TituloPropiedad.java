@@ -1,10 +1,12 @@
 package civitas;
 
+import javax.lang.model.util.ElementScanner6;
+
 public class TituloPropiedad {
     
     // Atributos
     private float alquilerBase;
-    private static float factorInteresesHipoteca = 1.1f;
+    private static final float factorInteresesHipoteca = 1.1f;
     private float factorRevalorizacion;
     private float hipotecaBase;
     private boolean hipotecado;
@@ -73,7 +75,7 @@ public class TituloPropiedad {
      * @return true si el jugador es el propietario
      */
     private boolean esEsteElPropietario (Jugador jugador){
-        return jugador == propietario;
+        return tienePropietario() && jugador == propietario;
     }
     
     /**
@@ -176,10 +178,12 @@ public class TituloPropiedad {
      * @return true si el propietario está en la cárcel
      */
     private boolean propietarioEncarcelado(){
-        if ( propietario.isEncarcelado() )
-            return true;
-        else
+        if ( propietario == null )
             return false;
+        else if (propietario.isEncarcelado() )
+			return true;
+		else
+			return false;
     }
     
     /**
@@ -205,9 +209,11 @@ public class TituloPropiedad {
         factorRevalorizacion = fr;
         hipotecaBase = hb;
         precioCompra = pc;
-        precioEdificar = pe;
-        
-        propietario = null;
+		precioEdificar = pe;
+		
+		hipotecado = false;
+		numCasas = 0;
+		numHoteles = 0;
     }
     
     
@@ -242,7 +248,7 @@ public class TituloPropiedad {
      * @return true si la operación ha tenido éxito
      */
     boolean vender (Jugador jugador){
-        if (jugador == propietario && !hipotecado){
+        if (tienePropietario() && jugador == propietario && !hipotecado){
             propietario.recibe( getPrecioVenta() );
             derruirCasas (numCasas, propietario);
             numHoteles = 0;
