@@ -19,19 +19,19 @@ class Dado
       @ultimoResultado = @random.rand(1..6)
     end
     
-    @ultimoResultado
+    return @ultimoResultado
   end
   
   def salgo_de_la_carcel
     if @ultimoResultado >= @@SalidaCarcel
-      true
+		return true
     else
-      false
+		return false
     end
   end
   
   def quien_empieza(n)
-    @random.rand(0..n-1)
+    return @random.rand(0..n-1)
   end
   
   def set_debug(b)

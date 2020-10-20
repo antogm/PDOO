@@ -25,7 +25,7 @@ class TituloPropiedad
   #end
   
   def cantidad_casas_hoteles
-    @numCasas + @numHoteles
+    return @numCasas + @numHoteles
   end
   
   #def comprar (jugador)
@@ -41,39 +41,36 @@ class TituloPropiedad
   #end
   
   def derruir_casas (n, jugador)
-    exito = true
-    
     if jugador == @propietario && @numCasas >= n
       @numCasas -= n
-    else
-      exito = false
+	  return true
     end
           
-    exito
+    return false
   end
   
   def es_este_el_propietario (jugador)
-    tiene_propietario && jugador  == @propietario
+    return tiene_propietario && (jugador  == @propietario)
   end
     
   def get_importe_cancelar_hipoteca
-    get_importe_hipoteca * @@factorInteresesHipoteca
+    return get_importe_hipoteca * @@factorInteresesHipoteca
   end
   
   def get_importe_hipoteca
-    @hipotecaBase*(1+(@numCasas*0.5)+(@numHoteles*2.5))
+    return @hipotecaBase*(1+(@numCasas*0.5)+(@numHoteles*2.5))
   end
       
   def get_precio_alquiler
     if @hipotecado || @propietario.is_encarcelado
-      0
+      return 0
     else
-      @alquilerBase*(1+(@numCasas*0.5)+(@numHoteles*2.5))
+      return @alquilerBase*(1+(@numCasas*0.5)+(@numHoteles*2.5))
     end
   end
       
   def get_precio_venta
-    @precioCompra + (@@factorRevalorizacion * (@numCasas + 5*@numHoteles) * @precioEdificar)
+    return @precioCompra + (@@factorRevalorizacion * (@numCasas + 5*@numHoteles) * @precioEdificar)
   end
   
   #def hipotecar(jugador)
@@ -82,14 +79,14 @@ class TituloPropiedad
   
   def propietario_encarcelado
     if @propietario.is_encarcelado
-      true
+      return true
     else
-      false
+      return false
     end
   end
   
   def tiene_propietario
-    propietario != nil
+    return propietario != nil
   end
   
   def to_string
@@ -98,7 +95,7 @@ class TituloPropiedad
     str += "\nPrecio dde compra: " + @precioCompra
     str += "\nPrecio edificar: " + @precioEdificar + "\n"
     
-    str
+    return str
   end
   
   def tramitar_alquiler(jugador)
@@ -114,9 +111,9 @@ class TituloPropiedad
       derruir_casas(@numCasas, propietario)
       @numHoteles = 0
       @propietario = nil
-      true
+      return true
     else
-      false
+	  return false
     end
   end
   

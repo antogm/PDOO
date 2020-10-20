@@ -54,25 +54,23 @@ class CivitasJuego
     end
   end
   
-  def final_del_juego
-    ret = false
-    
+  def final_del_juego 
     for i in 0..@jugadores.size do
       if @jugadores[i].en_bancarrota
-        ret = true
+        return true
       end
     end
     
-    ret
+    return false
   end
   
   def get_casilla_actual
     int numCasilla = get_jugador_actual.numCasillaActual
-    @tablero.get_casilla(numCasilla)
+    return @tablero.get_casilla(numCasilla)
   end
   
   def get_jugador_actual
-    @jugadores[@indiceJugadorActual]
+    return @jugadores[@indiceJugadorActual]
   end
   
   def hipotecar(ip)
@@ -81,7 +79,7 @@ class CivitasJuego
   
   def info_jugador_texto
     str = "Jugador actual: " + get_jugador_actual.nombre + " en la casilla: " + get_jugador_actual.numCasillaActual.to_s
-    str
+    return str
   end
   
   def inicializar_mazo_sorpresas(tablero)
@@ -133,7 +131,7 @@ class CivitasJuego
   def ranking
     ranking = @jugadores[0 .. @jugadores.length-1]
     ranking.sort.reverse
-    ranking
+    return ranking
   end
   
   def salir_carcel_pagando

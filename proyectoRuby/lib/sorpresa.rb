@@ -137,7 +137,7 @@ class Sorpresa
   end
   
   def jugador_correcto(actual, todos)
-    actual < todos.length
+    return actual < todos.length
   end
   
   def  salir_del_mazo
@@ -169,7 +169,7 @@ class Sorpresa
       nombre = "SALIRCARCEL"
     end
     
-    nombre
+    return nombre
   end
   
   def usada

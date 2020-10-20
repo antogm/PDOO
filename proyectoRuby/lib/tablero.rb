@@ -24,8 +24,8 @@ class Tablero
   # Métodos
   private
   def correcto(n=0)
-    tablero_ok = (@numCasillaCarcel < @casillas.length) && @tieneJuez
-    tablero_ok && (n < @casillas.length) && (n >= 0)
+    tablero_correcto = (@numCasillaCarcel < @casillas.length) && @tieneJuez
+    return tablero_correcto && (n < @casillas.length) && (n >= 0)
   end
   
   public
@@ -59,7 +59,7 @@ class Tablero
           @porSalida += 1
         end
         
-        nueva_posi
+        return nueva_posi
       end
     end
   end
@@ -68,9 +68,9 @@ class Tablero
     resta = destino - origen
     
     if resta >= 0
-      resta
+	  return resta
     else
-      resta + @casillas.length
+	  return resta + @casillas.length
     end
   end
   
@@ -81,17 +81,17 @@ class Tablero
     if @porSalida > 0
       temp = @porSalida
       @porSalida -= 1
-      temp
+      return temp
     else
-      @porSalida
+	  return @porSalida
     end
   end
   
   def get_casilla(n)
     if correcto(n)
-      @casillas[n]
+	  return @casillas[n]
     else
-      nil
+	  return nil
     end
   end  
 end

@@ -78,14 +78,17 @@ public class Sorpresa {
     
     private void aplicarAJugador_porJugador (int actual, ArrayList<Jugador> todos){
         if ( jugadorCorrecto(actual, todos) ){
-            informe(actual, todos);
+			informe(actual, todos);
+			
+			// Cobra al resto de jugadores
             String str = "Pagas " + valor + " al jugador " + todos.get(actual).getNombre() + "\n";
             Sorpresa pagar = new Sorpresa(TipoSorpresa.PAGARCOBRAR, valor * -1, str);
             
             for (int i = 0; i < todos.size(); i++)
                 if (i != actual)
                     pagar.aplicarAJugador(i, todos);
-            
+			
+			// Recibe el dinero
             str = "Recibes " + valor + " de cada jugador (" + valor*(todos.size()-1) + " en total)\n";
             Sorpresa cobrar = new Sorpresa(TipoSorpresa.PAGARCOBRAR, valor * (todos.size()-1), str);
             cobrar.aplicarAJugador(actual, todos);

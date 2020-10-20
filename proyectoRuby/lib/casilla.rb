@@ -63,9 +63,9 @@ class Casilla
   
   def jugador_correcto(actual, todos)
     if actual < todos.length && actual >= 0
-      true
+      return true
     else
-      false
+      return false
     end
   end
   
@@ -96,7 +96,7 @@ class Casilla
   end
   
   def to_string
-    @nombre
+    return @nombre
   end
   
   # Consultor

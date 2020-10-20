@@ -45,15 +45,15 @@ class Jugador
      num += @propiedades[i].cantidad_casas_hoteles
     end
     
-    num
+    return num
   end
   
   def <=> (otro)
-    self.saldo <=> otro.saldo
+    return self.saldo <=> otro.saldo
   end
   
   def compare_to(otro)
-    self <=> otro
+    return self <=> otro
   end
   
   def comprar(titulo)
@@ -70,19 +70,19 @@ class Jugador
   
   def debe_ser_encarcelado
     if @encarcelado
-      false
+	  return false
     elsif !tiene_salvoconducto
-      true
+	  return true
     end
     
     perder_salvoconducto
     evento = "El jugador " + @nombre + " se libra de la carcel y pierde su salvoconducto"
     Diario.instance.ocurre_evento(evento)
-    false
+    return false
   end
   
   def en_bancarrota
-    @saldo < 0
+    return @saldo < 0
   end
   
   def encarcelar(num_casilla_carcel)
@@ -95,7 +95,7 @@ class Jugador
   end
   
   def existe_la_propiedad(ip)
-    ip < @propiedades.length && ip >= 0
+    return (ip < @propiedades.length) && (ip >= 0)
   end
   
   def hipotecar(ip)
@@ -106,27 +106,27 @@ class Jugador
     @saldo += cantidad
     evento = "El jugador " + @nombre + " modifica su saldo por " + cantidad + " euros"
     Diario.instance.ocurre_evento(evento)
-    true
+    return true
   end
   
   def mover_a_casilla(numCasilla)
     if @encarcelado
-      false
+	  return false
     else
       @numCasillaActual = numCasilla
       @puedeComprar = false
       evento = "El jugador " + @nombre + " se ha movido a la casilla " + @numCasilla
       Diario.instance.ocurre_evento(evento)
-      true
+      return true
     end
   end
   
   def obtener_salvoconducto(sorpresa)
     if @encarcelado
-      false
+	  return false
     else
       @salvoconducto = sorpresa
-      true
+      return true
     end
   end
   
@@ -136,7 +136,7 @@ class Jugador
   
   def paga_alquiler(cantidad)
     if @encarcelado
-      false
+	  return false
     else
       paga(cantidad)
     end
@@ -144,7 +144,7 @@ class Jugador
   
   def paga_impuesto(cantidad)
     if @encarcelado
-      false
+	  return false
     else
       paga(cantidad)
     end
@@ -154,7 +154,7 @@ class Jugador
     modificar_saldo(@@PasoPorSalida)
     evento = "El jugador " + @nombre + " ha pasado por la casilla de salida y ha cobrado " + @@PasoPorSalida + " euros"
     Diario.instance.ocurre_evento(evento)
-    true
+    return true
   end
   
   def perder_salvoconducto
@@ -169,40 +169,40 @@ class Jugador
       @puedeComprar = true
     end
     
-    @puedeComprar
+    return @puedeComprar
   end
   
   def puede_salir_carcel_pagando
-    saldo >= @@PrecioLibertad
+    return saldo >= @@PrecioLibertad
   end
   
   def puedo_edificar_casa(propiedad)
     if propiedad.numCasas < @@CasasMax
-      true
+	  return true
     else
-      false
+	  return false
     end
   end
   
   def puedo_edificar_hotel(propiedad)
     if propiedad.numHoteles < @@HotelesMax && propiedad.numCasas >= @@CasasPorHotel
-      true
+	  return true
     else
-      false
+	  return false
     end
   end
   
   def puedo_gastar(precio)
     if @encarcelado
-      false
+	  return false
     else
-      @saldo >= precio
+	  return @saldo >= precio
     end
   end
   
   def recibe(cantidad)
     if @encarcelado
-      false
+	  return false
     else
       modificar_saldo(cantidad)
     end
@@ -214,9 +214,9 @@ class Jugador
       @encarcelado = false
       evento = "El jugador " + nombre + " ha pagado para salir de la cárcel"
       Diario.instance.ocurre_evento(evento)
-      true
+      return true
     else
-      false
+	  return false
     end
   end
   
@@ -225,33 +225,34 @@ class Jugador
       @encarcelado = false
       evento = "El jugador " + @nombre + " sale de la cárcel con su última tirada"
       Diario.instance.ocurre_evento(evento)
-      true
+      return true
     else
-      false
+	  return false
     end
   end
   
   def tiene_algo_que_gestionar
-    @propiedades.length > 0
+    return @propiedades.length > 0
   end
   
   def tiene_salvoconducto
-    @salvoconducto != nil
+    return @salvoconducto != nil
   end
   
   def to_string
-    "Nombre del jugador " + nombre + ", saldo " + saldo + ", está en la casilla " + numCasillaActual
+	str = "Nombre del jugador " + nombre + ", saldo " + saldo + ", está en la casilla " + numCasillaActual
+	return str
   end
   
   def vender(ip)
     if @encarcelado
-      false
+	  return false
     else
       existe_la_propiedad(ip)
       evento = "El jugador " + @nombre + " ha vendido la propiedad " + @propiedades[ip].nombre
       Diario.instance.ocurre_evento(evento)
       @propiedades.delete_at(ip)
-      true
+      return true
     end
   end
   

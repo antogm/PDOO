@@ -35,7 +35,7 @@ class MazoSorpresas
     @usadas += 1
     @ultimaSorpresa = @sorpresas[0]
     @sorpresas.delete_at(0)
-    @ultimaSorpresa
+    return @ultimaSorpresa
   end
   
   def inhabilitar_carta_especial(s)
