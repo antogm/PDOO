@@ -20,25 +20,56 @@ class TituloPropiedad
     @propietario = jugador
   end
   
-  #def cancelar_hipoteca (jugador)
-    
-  #end
+  def cancelar_hipoteca (jugador)
+    result = false;
+		
+		if (hipotecado && this.esEsteElPropietario(jugador))
+			jugador.paga(get_importe_cancelar_hipoteca)
+			@hipotecado = false
+			result = true
+		end
+		
+		result
+  end
   
   def cantidad_casas_hoteles
     return @numCasas + @numHoteles
   end
   
-  #def comprar (jugador)
-    
-  #end
+  def comprar (jugador)
+    result = false
+		
+		if (!tiene_propietario())
+			@propietario = jugador
+			result = true
+			@propietario.paga(@precioCompra)
+		end
+		
+		result
+  end
   
-  #def construir_casa (jugador)
-    
-  #end
+  def construir_casa (jugador)
+    result = false;
+		
+		if (!@hipotecado && tiene_propietario)
+      @numCasas = @numCasas +1
+      result = true
+		end
+		
+    result
+  end
   
-  #def construir_hotel (jugador)
-    
-  #end
+  def construir_hotel (jugador)
+    result = false
+		
+		if (es_este_el_propietario(jugador))
+			@propietario.paga(@precioEdificar);
+			@numHoteles++
+			result = true
+		end
+		
+		result
+  end
   
   def derruir_casas (n, jugador)
     if jugador == @propietario && @numCasas >= n
@@ -73,9 +104,17 @@ class TituloPropiedad
     return @precioCompra + (@@factorRevalorizacion * (@numCasas + 5*@numHoteles) * @precioEdificar)
   end
   
-  #def hipotecar(jugador)
-    
-  #end
+  def hipotecar(jugador)
+    salida = false
+		
+		if (!@hipotecado && es_este_el_propietario(jugador))
+			@propietario.recibe(get_importe_hipoteca())
+			@hipotecado = true
+			salida = true
+		end
+		
+		salida
+  end
   
   def propietario_encarcelado
     if @propietario.is_encarcelado

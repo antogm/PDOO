@@ -1,7 +1,8 @@
 # encoding:utf-8
-
-
 module Civitas
+require_relative 'titulo_propiedad'
+
+end
 class Jugador
   
   @@CasasMax = 4
@@ -19,7 +20,6 @@ class Jugador
     @saldo = otro_jugador.saldo
     @salvoconducto = otro_jugador.salvoconducto
     @propiedades = otro_jugador.propiedades[0 .. otro_jugador.propiedades.length-1]
-    #@propiedades = otro_jugador.propiedades.clone
   end
   
   def initialize(nombre)
@@ -35,7 +35,28 @@ class Jugador
   private :initialize
   
   def cancelar_hipoteca(ip)
-    # no implementado
+    result = false;
+		
+    if (@encarcelado)
+			return result;
+		end
+        
+		if (existe_la_propiedad(ip))
+			propiedad = @propiedades[ip]
+			cantidad = propiedad.get_importe_cancelar_hipoteca()
+			puedo_gastar = puedo_gastar(cantidad)
+
+			if (puedo_gastar)
+				result = propiedad.cancelar_hipoteca(self)
+				
+				if (result)
+					evento = "El jugador " + nombre + " cancela la hipoteca de la propiedad " + ip
+					Diario.instance.ocurre_evento(evento)
+				end
+			end
+		end
+		
+		result
   end
   
   def cantidad_casas_hoteles
@@ -57,15 +78,71 @@ class Jugador
   end
   
   def comprar(titulo)
-    # no implementado
+    result = false
+		
+		if (@encarcelado)
+			return result
+		end
+
+		if (@puedeComprar)
+			precio = titulo.get_precio_compra()
+			
+			if (puedo_gastar(precio))
+				result = titulo.comprar(self)
+				
+				if (result)
+					@propiedades.add(titulo)
+					evento = "El jugador " + @nombre + " compra la propiedad " + titulo.to_string
+					Diario.instance.ocurre_evento(evento)
+					@puedeComprar = false
+				end
+			end
+		end
+		
+		result;
   end
   
   def construir_casa(ip)
-    # no implementado
+    result = false
+		puedo_edificar_casa = false
+		
+		if (@encarcelado)
+			return result
+		end
+
+		existe = existe_la_propiedad(ip)
+		
+		if (existe)
+			propiedad = @propiedades[ip]
+			puedo_edificar_casa = puedo_edificar_casa(propiedad)
+			
+			if (puedo_edificar_casa)
+				result = propiedad.construir_casa(self)
+			end
+		end
+		
+		result
   end
   
   def construir_hotel(ip)
-    # no implementado
+    result = false
+		
+		if (@encarcelado)
+			return result
+		
+		if (existe_la_propiedad(ip))
+			propiedad = @propiedades[ip]
+			puedo_edificar_hotel = puedo_edificar_hotel(propiedad)
+			
+			if (puedo_edificar_hotel)
+				result = propiedad.construir_hotel(self)
+				propiedad.derruir_casas(@@casasPorHotel, self)
+				evento = "El jugador " + @nombre + " construye hotel en la propiedad " + ip
+				Diario.instance.ocurre_evento(evento);
+			end
+		end
+		
+		return result;
   end
   
   def debe_ser_encarcelado
@@ -99,7 +176,23 @@ class Jugador
   end
   
   def hipotecar(ip)
-    # no implementado
+    result = false
+		
+		if (@encarcelado)
+			return result
+		end
+		
+		if (existe_la_propiedad(ip))
+			propiedad = @propiedades[ip]
+			result = propiedad.hipotecar(self)
+		end
+		
+		if (result)
+			evento = "El jugador " + @nombre + " hupoteca la propiedad " + ip
+			Diario.instance.ocurre_evento(evento)
+		end
+
+		result
   end
   
   def modificar_saldo(cantidad)

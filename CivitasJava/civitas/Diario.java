@@ -1,7 +1,5 @@
 package civitas;
 
-
-
 import java.util.ArrayList;
 
 public class Diario {
@@ -13,7 +11,7 @@ public class Diario {
     return instance;
   }
   
-  private Diario () {
+  private Diario() {
     eventos = new ArrayList<>();
   }
   

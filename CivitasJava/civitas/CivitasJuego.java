@@ -16,7 +16,15 @@ public class CivitasJuego {
     // Métodos
    
     private void avanzaJugador(){
-        throw new UnsupportedOperationException("No implementado");
+        Jugador jugadorActual = jugadores.get(indiceJugadorActual);
+		int posicionActual = jugadorActual.getNumCasillaActual();
+		int tirada = Dado.getInstance().tirar();
+		int posicionNueva = tablero.nuevaPosicion(posicionActual, tirada);
+		Casilla casilla = tablero.getCasilla(posicionNueva);
+		this.contabilizarPasosPorSalida(jugadorActual);
+		jugadorActual.moverACasilla(posicionNueva);
+		casilla.recibeJugador(indiceJugadorActual, jugadores);
+		this.contabilizarPasosPorSalida(jugadorActual);
     }
     
     public boolean cancelarHipoteca(int ip){
@@ -45,8 +53,13 @@ public class CivitasJuego {
     }
     
     public boolean comprar(){
-        throw new UnsupportedOperationException("No implementado");
-    }
+        Jugador jugadorActual = jugadores.get(indiceJugadorActual);
+		int numCasillaActual = jugadorActual.getNumCasillaActual();
+		Casilla casilla = tablero.getCasilla(numCasillaActual);
+		TituloPropiedad titulo = casilla.getTituloPropiedad();
+		boolean res = jugadorActual.comprar(titulo);
+		return res;
+	}
     
     /**
      * Método para construir una casa en una propiedad del jugador
@@ -160,7 +173,7 @@ public class CivitasJuego {
             indiceJugadorActual = 0;
     }
     
-    private ArrayList<Jugador> ranking(){
+    public ArrayList<Jugador> ranking(){
         ArrayList<Jugador> ranking = new ArrayList<>(jugadores);
         Collections.sort(ranking, Jugador::compareTo);
         return ranking;
@@ -174,8 +187,22 @@ public class CivitasJuego {
         return getJugadorActual().salirCarcelTirando();
     }
     
+	/**
+	 * @return OperacionesJuego siguienteOperacion
+	 */
     public OperacionesJuego siguientePaso(){
-        throw new UnsupportedOperationException("No implementado");
+        Jugador jugadorActual = jugadores.get(indiceJugadorActual);
+		OperacionesJuego operacion = gestorEstados.operacionesPermitidas(jugadorActual, estado);
+		
+		if (operacion == OperacionesJuego.PASAR_TURNO){
+			pasarTurno();
+			siguientePasoCompletado(operacion);
+		} else if (operacion == OperacionesJuego.AVANZAR){
+			avanzaJugador();
+			siguientePasoCompletado(operacion);
+		}
+		
+		return operacion;
     }
 
     public void siguientePasoCompletado(OperacionesJuego operacion){

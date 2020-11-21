@@ -69,7 +69,7 @@ public class Dado {
      * Consultor para activar o desactivar el modo debug del dado
      * @param d valor booleano a establecer 
      */
-    void setDebug (boolean d){
+    public void setDebug (boolean d){
         debug = d;
         
         String str = "Se ha activado el modo debug del dado";

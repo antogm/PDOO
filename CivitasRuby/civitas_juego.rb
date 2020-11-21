@@ -29,7 +29,15 @@ class CivitasJuego
   end
   
   def avanza_jugador
-    # no implementado
+    jugador_actual = @jugadores[@indiceJugadorActual]
+		posicion_actual = jugador_actual.numCasillaActual
+		tirada = Dado.instance.tirar()
+		posicion_nueva = @tablero.nueva_posicion(posicion_actual, tirada)
+		casilla = @tablero.get_casilla(posicion_nueva)
+		contabilizar_pasos_por_salida(jugador_actual)
+		jugador_actual.mover_a_casilla(posicion_nueva)
+		casilla.recibe_jugador(@indiceJugadorActual, @jugadores)
+		contabilizar_pasos_por_salida(jugador_actual)
   end
   
   def cancelar_hipoteca(ip)

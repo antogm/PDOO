@@ -26,7 +26,15 @@ public class TituloPropiedad {
     }
     
     boolean cancelarHipoteca (Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+        boolean result = false;
+		
+		if (hipotecado && this.esEsteElPropietario(jugador)){
+			jugador.paga(this.getImporteCancelarHipoteca());
+			hipotecado = false;
+			result = true;
+		}
+		
+		return result;
     }
 
     /**
@@ -38,15 +46,38 @@ public class TituloPropiedad {
     }
     
     boolean comprar (Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+        boolean result = false;
+		
+		if (!tienePropietario()){
+			propietario = jugador;
+			result = true;
+			propietario.paga(precioCompra);
+		}
+		
+		return result;
     }
 
     boolean construirCasa (Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+        boolean result = false;
+		
+		if (!hipotecado && tienePropietario()) {
+            numCasas++;
+            result = true;
+        }
+		
+        return result;
     }
 
     boolean construirHotel (Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+        boolean result = false;
+		
+		if (esEsteElPropietario(jugador)){
+			propietario.paga(precioEdificar);
+			numHoteles++;
+			result = true;
+		}
+		
+		return result;
     }
     
     /**
@@ -104,7 +135,7 @@ public class TituloPropiedad {
      * Consultor para el atributo privado nombre
      * @return String nombre de la propiedad 
      */
-    String getNombre(){
+    public String getNombre(){
         return nombre;
     }
     
@@ -168,7 +199,15 @@ public class TituloPropiedad {
     }
     
     boolean hipotecar (Jugador jugador){
-        throw new UnsupportedOperationException("No implementado");
+        boolean salida = false;
+		
+		if (!hipotecado && esEsteElPropietario(jugador)){
+			propietario.recibe(getImporteHipoteca());
+			hipotecado = true;
+			salida = true;
+		}
+		
+		return salida;
     }
     
     /**
@@ -217,12 +256,12 @@ public class TituloPropiedad {
     
     @Override
     public String toString(){
-        String str  = "Nombre de la propiedad: " + nombre + "\n"
-                    + "Precio de alquiler: " + alquilerBase + "\n"
-                    + "Factor de revalorización: " + factorRevalorizacion + "\n"
-                    + "Hipoteca base: " + hipotecaBase + "\n"
-                    + "Precio compra: " + precioCompra + "\n"
-                    + "Precio edificar: " + precioEdificar + "\n";
+        String str  = nombre + "\n"
+                    + "\tPrecio de alquiler: " + alquilerBase + "\n"
+                    + "\tFactor de revalorización: " + factorRevalorizacion + "\n"
+                    + "\tHipoteca base: " + hipotecaBase + "\n"
+                    + "\tPrecio compra: " + precioCompra + "\n"
+                    + "\tPrecio edificar: " + precioEdificar + "\n";
         
         return str;
     }
@@ -234,8 +273,9 @@ public class TituloPropiedad {
      */
     void tramitarAlquiler (Jugador jugador){
         if( tienePropietario() && jugador != propietario){
-            jugador.pagaAlquiler( getPrecioAlquiler() );
-            propietario.recibe( getPrecioAlquiler() );
+            float precio = getPrecioAlquiler();
+			jugador.pagaAlquiler(precio);
+            propietario.recibe(precio);
         }
             
     }
