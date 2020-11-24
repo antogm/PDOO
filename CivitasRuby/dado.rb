@@ -1,5 +1,5 @@
 require 'singleton'
-require 'Diario'
+require 'diario'
 
 module Civitas
 class Dado

@@ -1,5 +1,7 @@
 require_relative 'diario'
+require_relative 'operaciones_juego'
 require_relative 'estados_juego'
+require_relative 'jugador'
 
 module Civitas
   class Gestor_estados
@@ -12,7 +14,6 @@ module Civitas
       op = nil
 
       case estado
-
       when Estados_juego::INICIO_TURNO
         if (jugador.encarcelado)
           op = Operaciones_juego::SALIR_CARCEL
@@ -26,8 +27,9 @@ module Civitas
       when Estados_juego::DESPUES_AVANZAR
         if (jugador.encarcelado)
           op = Operaciones_juego::PASAR_TURNO
+        
         else
-          if (jugador.puede_comprar)
+          if (jugador.puedeComprar)
             op = Operaciones_juego::COMPRAR
           else
             if (jugador.tiene_algo_que_gestionar)

@@ -286,13 +286,17 @@ public class TituloPropiedad {
      * @return true si la operación ha tenido éxito
      */
     boolean vender (Jugador jugador){
-        if (tienePropietario() && jugador == propietario && !hipotecado){
-            propietario.recibe( getPrecioVenta() );
+        boolean salida = false;
+        System.out.println("\n\nTEST Vendiendo titulo\n\n");
+        if (esEsteElPropietario(jugador) && !hipotecado){
+            jugador.recibe( getPrecioVenta() );
+            propietario = null;
             derruirCasas (numCasas, propietario);
             numHoteles = 0;
-            propietario = null;
-            return true;
-        }else
-            return false;
+            numCasas = 0;
+            salida = true;
+        }
+        
+        return salida;
     }
 }

@@ -54,12 +54,12 @@ public class CivitasJuego {
     
     public boolean comprar(){
         Jugador jugadorActual = jugadores.get(indiceJugadorActual);
-		int numCasillaActual = jugadorActual.getNumCasillaActual();
-		Casilla casilla = tablero.getCasilla(numCasillaActual);
-		TituloPropiedad titulo = casilla.getTituloPropiedad();
-		boolean res = jugadorActual.comprar(titulo);
-		return res;
-	}
+        int numCasillaActual = jugadorActual.getNumCasillaActual();
+        Casilla casilla = tablero.getCasilla(numCasillaActual);
+        TituloPropiedad titulo = casilla.getTituloPropiedad();
+        boolean res = jugadorActual.comprar(titulo);
+        return res;
+    }
     
     /**
      * Método para construir una casa en una propiedad del jugador

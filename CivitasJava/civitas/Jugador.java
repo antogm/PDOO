@@ -537,17 +537,17 @@ public class Jugador implements Comparable<Jugador>{
      * @return true si la operación tiene éxito
      */
     boolean vender (int ip){
-        if (isEncarcelado() )
-            return false;
-
-        if (existeLaPropiedad(ip) )
-            if (propiedades.get(ip).vender(this)){
+        boolean salida = false;
+        
+        if (!isEncarcelado() && existeLaPropiedad(ip)){
+            if( propiedades.get(ip).vender(this) ){
                 String evento = "El jugador " + nombre + " ha vendido la propiedad " + propiedades.get(ip).getNombre();
                 Diario.getInstance().ocurreEvento(evento);
                 propiedades.remove(ip);
-                return true;
+                salida = true;   
             }
+        }
         
-        return false;
+        return salida;
     }
 }

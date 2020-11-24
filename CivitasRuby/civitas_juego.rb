@@ -6,16 +6,17 @@ require_relative 'jugador'
 require_relative 'mazo_sorpresas'
 require_relative 'tipo_sorpresa'
 require_relative 'sorpresa'
-require_relative 'Dado'
-require_relative 'Tablero'
+require_relative 'dado'
+require_relative 'tablero'
 require_relative 'titulo_propiedad'
+require_relative 'operaciones_juego'
   
 class CivitasJuego
   
   def initialize(nombres)
-    num_jugadores = nombres.length
     @jugadores = []
-    for i in 0..num_jugadores do
+    num_jugadores = nombres.size
+    for i in 0..num_jugadores-1
       @jugadores.push(Jugador.new(nombres[i]))
     end
       
@@ -45,7 +46,10 @@ class CivitasJuego
   end
   
   def comprar
-    #no implementado
+    jugador_actual = @jugadores[@indiceJugadorActual]
+    casilla = @tablero.get_casilla(jugador_actual.numCasillaActual)
+    titulo = casilla.tituloPropiedad
+    jugador_actual.comprar(titulo)
   end
   
   def construir_casa(ip)
@@ -63,7 +67,7 @@ class CivitasJuego
   end
   
   def final_del_juego 
-    for i in 0..@jugadores.size do
+    for i in 0..@jugadores.size-1
       if @jugadores[i].en_bancarrota
         return true
       end
@@ -73,8 +77,8 @@ class CivitasJuego
   end
   
   def get_casilla_actual
-    int numCasilla = get_jugador_actual.numCasillaActual
-    return @tablero.get_casilla(numCasilla)
+    num_casilla = get_jugador_actual.numCasillaActual
+    @tablero.get_casilla(num_casilla)
   end
   
   def get_jugador_actual
@@ -151,7 +155,17 @@ class CivitasJuego
   end
   
   def siguiente_paso
-    #no implementado
+    jugador_actual = @jugadores[@indiceJugadorActual]
+    operacion = @gestorEstados.operaciones_permitidas(jugador_actual, @estado)
+    if operacion == Operaciones_juego::PASAR_TURNO
+      pasar_turno
+      siguiente_paso_completado(operacion)
+    elsif operacion == Operaciones_juego::AVANZAR
+      avanza_jugador
+      siguiente_paso_completado(operacion)
+    end
+    
+    operacion
   end
   
   def siguiente_paso_completado(operacion)

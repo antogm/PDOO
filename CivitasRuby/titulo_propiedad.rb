@@ -4,15 +4,16 @@ class TituloPropiedad
   
   # Constructor
   def initialize (nombre, ab, fr, hb, pc, pe)
-    @nombre = nombre;
-    @alquilerBase = ab;
-    @factorRevalorizacion = fr;
-    @hipotecaBase = hb;
-    @hipotecado = false;
-    @numCasas = 0;
-    @numHoteles = 0;
-    @precioCompra = pc;
-    @precioEdificar = pe;
+    @nombre = nombre
+    @alquilerBase = ab
+    @factorRevalorizacion = fr
+    @hipotecaBase = hb
+    @hipotecado = false
+    @numCasas = 0
+    @numHoteles = 0
+    @precioCompra = pc
+    @precioEdificar = pe
+    @propietario = nil
   end
   
   # Métodos
@@ -21,9 +22,9 @@ class TituloPropiedad
   end
   
   def cancelar_hipoteca (jugador)
-    result = false;
+    result = false
 		
-		if (hipotecado && this.esEsteElPropietario(jugador))
+		if @hipotecado && es_este_el_propietario(jugador)
 			jugador.paga(get_importe_cancelar_hipoteca)
 			@hipotecado = false
 			result = true
@@ -49,7 +50,7 @@ class TituloPropiedad
   end
   
   def construir_casa (jugador)
-    result = false;
+    result = false
 		
 		if (!@hipotecado && tiene_propietario)
       @numCasas = @numCasas +1
@@ -63,8 +64,8 @@ class TituloPropiedad
     result = false
 		
 		if (es_este_el_propietario(jugador))
-			@propietario.paga(@precioEdificar);
-			@numHoteles++
+			@propietario.paga(@precioEdificar)
+			@numHoteles = @numHoteles + 1
 			result = true
 		end
 		
@@ -93,7 +94,7 @@ class TituloPropiedad
   end
       
   def get_precio_alquiler
-    if @hipotecado || @propietario.is_encarcelado
+    if @hipotecado || propietario_encarcelado
       return 0
     else
       return @alquilerBase*(1+(@numCasas*0.5)+(@numHoteles*2.5))
@@ -101,7 +102,7 @@ class TituloPropiedad
   end
       
   def get_precio_venta
-    return @precioCompra + (@@factorRevalorizacion * (@numCasas + 5*@numHoteles) * @precioEdificar)
+    return @precioCompra + (@factorRevalorizacion * (@numCasas + 5*@numHoteles) * @precioEdificar)
   end
   
   def hipotecar(jugador)
@@ -117,7 +118,7 @@ class TituloPropiedad
   end
   
   def propietario_encarcelado
-    if @propietario.is_encarcelado
+    if @propietario.encarcelado
       return true
     else
       return false
@@ -125,7 +126,7 @@ class TituloPropiedad
   end
   
   def tiene_propietario
-    return propietario != nil
+    !@propietario.nil?
   end
   
   def to_string
@@ -139,21 +140,25 @@ class TituloPropiedad
   
   def tramitar_alquiler(jugador)
     if tiene_propietario && jugador!=@propietario
-      jugador.paga_alquiler(get_precio_alquiler)
-      @propietario.recib(get_precio_alquiler)
+      precio = get_precio_alquiler
+      jugador.paga_alquiler(precio)
+      @propietario.recibe(precio)
     end
   end
   
   def vender(jugador)
-    if tiene_propietario && @propietario == jugador && !@hipotecado
-      @propietario.recibe(get_precio_venta)
+    salida = false
+    
+    if es_este_el_propietario(jugador) && !@hipotecado
+      jugador.recibe(get_precio_venta)
       derruir_casas(@numCasas, propietario)
       @numHoteles = 0
+      @numCasas = 0
       @propietario = nil
-      return true
-    else
-	  return false
+      salida = true
     end
+    
+    salida
   end
   
   attr_reader :precioCompra, :precioEdificar, :propietario, :numHoteles, :numCasas, :nombre, :hipotecado

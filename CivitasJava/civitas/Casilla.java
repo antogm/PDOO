@@ -91,38 +91,38 @@ public class Casilla {
     
     void recibeJugador (int iactual, ArrayList<Jugador> todos){
         switch(tipo){
-			case CALLE:
-				recibeJugador_calle(iactual, todos);
-				break;
+        case CALLE:
+            recibeJugador_calle(iactual, todos);
+            break;
 				
-			case IMPUESTO:
-				recibeJugador_impuesto(iactual, todos);
-				break;
+        case IMPUESTO:
+            recibeJugador_impuesto(iactual, todos);
+            break;
 				
-			case JUEZ:
-				recibeJugador_juez(iactual, todos);
-				break;
+        case JUEZ:
+            recibeJugador_juez(iactual, todos);
+            break;
 				
-			case SORPRESA:
-				recibeJugador_sorpresa(iactual, todos);
-				break;
+        case SORPRESA:
+            recibeJugador_sorpresa(iactual, todos);
+            break;
 				
-			default:
-				informe(iactual, todos);
-				break;
-		}
+        default:
+            informe(iactual, todos);
+            break;
+	}
     }
  
     private void recibeJugador_calle (int iactual, ArrayList<Jugador> todos){
         if (jugadorCorrecto(iactual, todos)){
-			informe(iactual, todos);
-			Jugador jugador = todos.get(iactual);
+            informe(iactual, todos);
+            Jugador jugador = todos.get(iactual);
 			
-			if (!tituloPropiedad.tienePropietario()){
-				jugador.puedeComprarCasilla();
-				tituloPropiedad.tramitarAlquiler(jugador);
-			}
-		}
+            if (!tituloPropiedad.tienePropietario()){
+		        jugador.puedeComprarCasilla();
+		        tituloPropiedad.tramitarAlquiler(jugador);
+            }
+        }
     }
     
     private void recibeJugador_impuesto (int iactual, ArrayList<Jugador> todos){
@@ -141,10 +141,10 @@ public class Casilla {
     
     private void recibeJugador_sorpresa (int iactual, ArrayList<Jugador> todos){
         if (jugadorCorrecto(iactual, todos)){
-			Sorpresa sorpresa = mazo.siguiente();
-			informe(iactual, todos);
-			sorpresa.aplicarAJugador(iactual, todos);
-		}
+            Sorpresa sorpresa = mazo.siguiente();
+            informe(iactual, todos);
+            sorpresa.aplicarAJugador(iactual, todos);
+	    }
     }
     
     @Override

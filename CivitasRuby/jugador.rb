@@ -1,8 +1,7 @@
 # encoding:utf-8
-module Civitas
 require_relative 'titulo_propiedad'
 
-end
+module Civitas
 class Jugador
   
   @@CasasMax = 4
@@ -35,10 +34,10 @@ class Jugador
   private :initialize
   
   def cancelar_hipoteca(ip)
-    result = false;
+    result = false
 		
     if (@encarcelado)
-			return result;
+			return result
 		end
         
 		if (existe_la_propiedad(ip))
@@ -50,7 +49,7 @@ class Jugador
 				result = propiedad.cancelar_hipoteca(self)
 				
 				if (result)
-					evento = "El jugador " + nombre + " cancela la hipoteca de la propiedad " + ip
+					evento = "El jugador " + nombre + " cancela la hipoteca de la propiedad " + ip.to_s
 					Diario.instance.ocurre_evento(evento)
 				end
 			end
@@ -62,7 +61,7 @@ class Jugador
   def cantidad_casas_hoteles
     num = 0
     
-    for i in 0..@propiedades.length do
+    for i in 0..@propiedades.length-1
      num += @propiedades[i].cantidad_casas_hoteles
     end
     
@@ -84,22 +83,19 @@ class Jugador
 			return result
 		end
 
-		if (@puedeComprar)
-			precio = titulo.get_precio_compra()
-			
-			if (puedo_gastar(precio))
+		if (@puedeComprar)			
+			if puedo_gastar(titulo.precioCompra)
 				result = titulo.comprar(self)
 				
 				if (result)
-					@propiedades.add(titulo)
-					evento = "El jugador " + @nombre + " compra la propiedad " + titulo.to_string
-					Diario.instance.ocurre_evento(evento)
-					@puedeComprar = false
+					@propiedades.push(titulo)
+					Diario.instance.ocurre_evento("El jugador " + @nombre + " compra la propiedad " + titulo.nombre)
 				end
+        @puedeComprar = false
 			end
 		end
 		
-		result;
+		result
   end
   
   def construir_casa(ip)
@@ -108,19 +104,19 @@ class Jugador
 		
 		if (@encarcelado)
 			return result
-		end
-
-		existe = existe_la_propiedad(ip)
+		else
+      existe = existe_la_propiedad(ip)
 		
-		if (existe)
-			propiedad = @propiedades[ip]
-			puedo_edificar_casa = puedo_edificar_casa(propiedad)
+      if (existe)
+        propiedad = @propiedades[ip]
+        puedo_edificar_casa = puedo_edificar_casa(propiedad)
 			
-			if (puedo_edificar_casa)
-				result = propiedad.construir_casa(self)
-			end
-		end
-		
+        if (puedo_edificar_casa)
+          result = propiedad.construir_casa(self)
+        end
+      end
+    end
+
 		result
   end
   
@@ -129,6 +125,7 @@ class Jugador
 		
 		if (@encarcelado)
 			return result
+    end
 		
 		if (existe_la_propiedad(ip))
 			propiedad = @propiedades[ip]
@@ -136,13 +133,13 @@ class Jugador
 			
 			if (puedo_edificar_hotel)
 				result = propiedad.construir_hotel(self)
-				propiedad.derruir_casas(@@casasPorHotel, self)
-				evento = "El jugador " + @nombre + " construye hotel en la propiedad " + ip
-				Diario.instance.ocurre_evento(evento);
+				propiedad.derruir_casas(@@CasasPorHotel, self)
+				evento = "El jugador " + @nombre + " construye hotel en la propiedad " + ip.to_s
+				Diario.instance.ocurre_evento(evento)
 			end
 		end
 		
-		return result;
+		return result
   end
   
   def debe_ser_encarcelado
@@ -188,7 +185,7 @@ class Jugador
 		end
 		
 		if (result)
-			evento = "El jugador " + @nombre + " hupoteca la propiedad " + ip
+			evento = "El jugador " + @nombre + " hupoteca la propiedad " + ip.to_s
 			Diario.instance.ocurre_evento(evento)
 		end
 
@@ -197,18 +194,18 @@ class Jugador
   
   def modificar_saldo(cantidad)
     @saldo += cantidad
-    evento = "El jugador " + @nombre + " modifica su saldo por " + cantidad + " euros"
+    evento = "El jugador " + @nombre + " modifica su saldo por " + cantidad.to_s + " euros"
     Diario.instance.ocurre_evento(evento)
     return true
   end
   
   def mover_a_casilla(numCasilla)
     if @encarcelado
-	  return false
+      return false
     else
       @numCasillaActual = numCasilla
       @puedeComprar = false
-      evento = "El jugador " + @nombre + " se ha movido a la casilla " + @numCasilla
+      evento = "El jugador " + @nombre + " se ha movido a la casilla " + @numCasillaActual.to_s
       Diario.instance.ocurre_evento(evento)
       return true
     end
@@ -261,7 +258,7 @@ class Jugador
     else
       @puedeComprar = true
     end
-    
+
     return @puedeComprar
   end
   
@@ -270,10 +267,12 @@ class Jugador
   end
   
   def puedo_edificar_casa(propiedad)
-    if propiedad.numCasas < @@CasasMax
-	  return true
+    precio = propiedad.precioEdificar
+    
+    if puedo_gastar(precio) && propiedad.numCasas < @@CasasMax
+    	return true
     else
-	  return false
+      return false
     end
   end
   
@@ -338,18 +337,21 @@ class Jugador
   end
   
   def vender(ip)
-    if @encarcelado
-	  return false
-    else
-      existe_la_propiedad(ip)
-      evento = "El jugador " + @nombre + " ha vendido la propiedad " + @propiedades[ip].nombre
-      Diario.instance.ocurre_evento(evento)
-      @propiedades.delete_at(ip)
-      return true
+    salida = false
+    
+    if !@encarcelado && existe_la_propiedad(ip)
+      if @propiedades[ip].vender(self)
+        evento = "El jugador " + @nombre + " ha vendido la propiedad " + @propiedades[ip].nombre
+        Diario.instance.ocurre_evento(evento)
+        @propiedades.delete_at(ip)
+        salida = true
+      end
     end
+    
+    salida
   end
   
-  attr_reader :CasasMax, :CasasPorHotel, :HotelesMax, :nombre, :numCasillaActual, :PrecioLibertad, :PasoPorSalida, :propiedades, :puedeComprar, :saldo, :encarcelado
+  attr_reader :CasasMax, :CasasPorHotel, :HotelesMax, :nombre, :numCasillaActual, :PrecioLibertad, :PasoPorSalida, :puedeComprar, :saldo, :encarcelado, :propiedades
   
 end
 end

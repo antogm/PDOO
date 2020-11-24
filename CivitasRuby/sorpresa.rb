@@ -97,7 +97,7 @@ class Sorpresa
       str = "Pagas " + @valor + " al jugador " + todos[actual].nombre
       sorpresa_pagar = Sorpresa.new_resto(TipoSorpresa::PAGARCOBRAR, @valor * -1, str)
       
-      for i in 0..4 do
+      for i in 0..3
         if i != actual
           sorpresa_pagar.aplicar_a_jugador(i, todos)
         end
@@ -114,7 +114,7 @@ class Sorpresa
       informe(actual, todos)
       
       tiene_salvoconducto = false
-      for i in 0..4 do
+      for i in 0..3
         if (todos[i].tiene_salvoconducto)
           tiene_salvoconducto = true
         end
@@ -128,7 +128,7 @@ class Sorpresa
   end
   
   def informe(actual, todos)
-    evento = "Se ha aplicado una sorpresa " + to_string + " al jugador " + todos[actual].get_nombre + "\n";
+    evento = "Se ha aplicado una sorpresa " + to_string + " al jugador " + todos[actual].get_nombre + "\n"
     Diario.instance.ocurre_evento(evento)
   end
   

@@ -20,23 +20,23 @@ class VistaTextual{
 	private Scanner in;
 	
 	VistaTextual(){
-		in = new Scanner(System.in);
+        in = new Scanner(System.in);
 	}
 	
 	void mostrarEstado(String estado){
-		System.out.println(estado);
+        System.out.println(estado);
 	}
 	
 	void pausa() {
-		System.out.print ("Pulsa una tecla");
-		in.nextLine();
+        System.out.print ("Pulsa una tecla");
+        in.nextLine();
 	}
 
 	int leeEntero (int max, String msg1, String msg2){
-		boolean ok;
-		String cadena;
-		int numero = -1;
-		do{
+        boolean ok;
+        String cadena;
+        int numero = -1;
+        do{
 			System.out.print (msg1);
 			cadena = in.nextLine();
 			try{
@@ -50,9 +50,9 @@ class VistaTextual{
 				System.out.println(msg2);
 				ok = false;
 			}
-		}while (!ok);
+        }while (!ok);
 
-		return numero;
+        return numero;
 	}
 
 	int menu (String titulo, ArrayList<String> lista){
@@ -71,69 +71,67 @@ class VistaTextual{
 	}
 
 	SalidasCarcel salirCarcel() {
-		int opcion = menu ("Elige la forma para intentar salir de la carcel", new ArrayList<> (Arrays.asList("Pagando","Tirando el dado")));
-		return (SalidasCarcel.values()[opcion]);
+        int opcion = menu ("Elige la forma para intentar salir de la carcel", new ArrayList<> (Arrays.asList("Pagando","Tirando el dado")));
+        return (SalidasCarcel.values()[opcion]);
 	}
 
 	Respuestas comprar(){
-		ArrayList<String> opciones = new ArrayList<>(Arrays.asList("SI", "NO"));
-		int opcion = menu("¿Desea comprar la propiedad?", opciones);
+        ArrayList<String> opciones = new ArrayList<>(Arrays.asList("SI", "NO"));
+        int opcion = menu("¿Desea comprar la propiedad?", opciones);
 		
-		return (Respuestas.values()[opcion]);
+        return (Respuestas.values()[opcion]);
 	}
 
 	void gestionar(){
-		ArrayList<String> opciones = new ArrayList<>(Arrays.asList("VENDER", "HIPOTECAR", "CANCELAR_HIPOTECA", "CONSTRUIR_CASA", "CONSTRUIR_HOTEL",	"TERMINAR"));
-		iGestion = menu("Introduzca que gestion desea realizar", opciones);
+    	ArrayList<String> opciones = new ArrayList<>(Arrays.asList("VENDER", "HIPOTECAR", "CANCELAR_HIPOTECA", "CONSTRUIR_CASA", "CONSTRUIR_HOTEL",	"TERMINAR"));
+        iGestion = menu("Introduzca que gestion desea realizar", opciones);
 		
-		if (iGestion != 5){
+        if (iGestion != 5){
 			ArrayList<String> strPropiedades = new ArrayList<>();
 			ArrayList<TituloPropiedad> propiedades = new ArrayList<>(juegoModel.getJugadorActual().getPropiedades());
 
 			for (int i = 0; i < propiedades.size(); i++)
-				strPropiedades.add(propiedades.get(i).getNombre() );
+                strPropiedades.add(propiedades.get(i).getNombre() );
 
 			iPropiedad = menu("Seleccione que propiedad gestionar", strPropiedades);
-		}
+        }
 	}
   
 	public int getGestion(){
-		return iGestion;
+        return iGestion;
 	}
 	
 	public int getPropiedad(){
-		return iPropiedad;
+        return iPropiedad;
 	}
     
 	void mostrarSiguienteOperacion(OperacionesJuego operacion){
-		System.out.println("La siguiente operación a realizar es: " + operacion.toString());
+        System.out.println("La siguiente operación a realizar es: " + operacion.toString());
 	}
 
 	void mostrarEventos(){
-		while (Diario.getInstance().eventosPendientes()){
+        while (Diario.getInstance().eventosPendientes()){
 			System.out.println(Diario.getInstance().leerEvento());
-		}
+        }
 	}
   
 	public void setCivitasJuego(CivitasJuego civitas){ 
-		juegoModel = civitas;
-		this.actualizarVista();
+        juegoModel = civitas;
+        this.actualizarVista();
 	}
   
 	void actualizarVista(){
-		Jugador jugador = juegoModel.getJugadorActual();
-		int numPropiedades = jugador.getPropiedades().size();
-		Casilla casillaActual = juegoModel.getCasillaActual();
+        Jugador jugador = juegoModel.getJugadorActual();
+        int numPropiedades = jugador.getPropiedades().size();
+        Casilla casillaActual = juegoModel.getCasillaActual();
 		
-		String info = "Jugador actual: " + jugador + "\n"
+        String info = "Jugador actual: " + jugador + "\n"
 					+ "Casilla: " + casillaActual.getNombre() + "\n"
 					+ "Num. propiedades: " + numPropiedades + "\n";
 		
-		if (numPropiedades > 0){
-			for (int i = 0; i < numPropiedades; i++)
-				info += i + ") " + jugador.getPropiedades().get(i).getNombre() + "\n";
-			
-			info += "\n";
-		}
+        for (int i = 0; i < numPropiedades; i++)
+            info += i + ") " + jugador.getPropiedades().get(i).getNombre() + "\n";	
+                    
+        info += "\n";
 	}
 }
