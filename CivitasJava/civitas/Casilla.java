@@ -33,7 +33,11 @@ public class Casilla {
     void recibeJugador (int iactual, ArrayList<Jugador> todos) throws Exception{
         informe(iactual, todos);
     }
-        
+
+    public String getNombre(){
+        return nombre;
+    }
+
     @Override
     public String toString(){
         return nombre;
