@@ -17,14 +17,14 @@ public class CivitasJuego {
    
     private void avanzaJugador(){
         Jugador jugadorActual = jugadores.get(indiceJugadorActual);
-		int posicionActual = jugadorActual.getNumCasillaActual();
-		int tirada = Dado.getInstance().tirar();
-		int posicionNueva = tablero.nuevaPosicion(posicionActual, tirada);
-		Casilla casilla = tablero.getCasilla(posicionNueva);
-		this.contabilizarPasosPorSalida(jugadorActual);
-		jugadorActual.moverACasilla(posicionNueva);
-		casilla.recibeJugador(indiceJugadorActual, jugadores);
-		this.contabilizarPasosPorSalida(jugadorActual);
+	int posicionActual = jugadorActual.getNumCasillaActual();
+	int tirada = Dado.getInstance().tirar();
+	int posicionNueva = tablero.nuevaPosicion(posicionActual, tirada);
+	Casilla casilla = tablero.getCasilla(posicionNueva);
+	this.contabilizarPasosPorSalida(jugadorActual);
+	jugadorActual.moverACasilla(posicionNueva);
+	casilla.recibeJugador(indiceJugadorActual, jugadores);
+	this.contabilizarPasosPorSalida(jugadorActual);
     }
     
     public boolean cancelarHipoteca(int ip){
@@ -56,9 +56,8 @@ public class CivitasJuego {
         Jugador jugadorActual = jugadores.get(indiceJugadorActual);
         int numCasillaActual = jugadorActual.getNumCasillaActual();
         Casilla casilla = tablero.getCasilla(numCasillaActual);
-        TituloPropiedad titulo = casilla.getTituloPropiedad();
-        boolean res = jugadorActual.comprar(titulo);
-        return res;
+        TituloPropiedad titulo = ((CasillaCalle) casilla).getTituloPropiedad();
+        return jugadorActual.comprar(titulo);
     }
     
     /**
@@ -122,16 +121,16 @@ public class CivitasJuego {
      * @param tablero de juego
      */
     private void inicializarMazoSorpresas(Tablero tablero){
-        mazo.alMazo(new Sorpresa(TipoSorpresa.IRCARCEL, tablero));
-        mazo.alMazo(new Sorpresa(TipoSorpresa.SALIRCARCEL, mazo));
-        mazo.alMazo(new Sorpresa(TipoSorpresa.PORJUGADOR, -300, "PAGAR_PORJUGADOR_1"));
-        mazo.alMazo(new Sorpresa(TipoSorpresa.PORJUGADOR, 300, "COBRAR_PORJUGADOR_1"));
-        mazo.alMazo(new Sorpresa(TipoSorpresa.IRCASILLA, tablero, 9, "IRCASILLA_9"));
-        mazo.alMazo(new Sorpresa(TipoSorpresa.IRCASILLA, tablero, 19, "IRCASILLA_19"));
-        mazo.alMazo(new Sorpresa(TipoSorpresa.PORCASAHOTEL, -100, "PAGAR_PORCASAHOTEL_1"));
-        mazo.alMazo(new Sorpresa(TipoSorpresa.PORCASAHOTEL, 100, "COBRAR_PORCASAHOTEL_1"));
-        mazo.alMazo(new Sorpresa(TipoSorpresa.PAGARCOBRAR, 500, "COBRAR_1"));
-        mazo.alMazo(new Sorpresa(TipoSorpresa.PAGARCOBRAR, -500, "PAGAR_1"));
+        mazo.alMazo(new SorpresaSalirCarcel(mazo, "Salvoconducto"));
+        mazo.alMazo(new SorpresaPorJugador(-300, "PAGAR_PORJUGADOR_1"));
+        mazo.alMazo(new SorpresaPorJugador(300, "COBRAR_PORJUGADOR_1"));
+        mazo.alMazo(new SorpresaIrCasilla(tablero, 9, "Ir a casilla 9"));
+        mazo.alMazo(new SorpresaIrCasilla(tablero, 19, "Ir a casilla 19"));
+        mazo.alMazo(new SorpresaIrCarcel(tablero, tablero.getCarcel(), "Ir a la cárcel"));
+        mazo.alMazo(new SorpresaPorCasaHotel(-100, "Pagar 100 por cada casa/hotel"));
+        mazo.alMazo(new SorpresaPorCasaHotel(100, "Cobrar 100 por cada casa/hotel"));
+        mazo.alMazo(new SorpresaPagarCobrar(500, "Cobrar 500"));
+        mazo.alMazo(new SorpresaPagarCobrar(-500, "Pagar 500"));
     }
     
     /**
@@ -142,25 +141,25 @@ public class CivitasJuego {
         int numCasillaCarcel = 5;
         tablero = new Tablero(numCasillaCarcel);
         
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle1", 10, 1.1f, 500, 600, 250)));
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle2", 10, 1.1f, 500, 600, 250)));
-        tablero.añadeCasilla(new Casilla(mazo, "Sorpresa1"));
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle3", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle1", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle2", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaSorpresa(mazo, "Sorpresa1"));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle3", 10, 1.1f, 500, 600, 250)));
         // Cárcel
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle4", 10, 1.1f, 500, 600, 250)));
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle5", 10, 1.1f, 500, 600, 250)));
-        tablero.añadeCasilla(new Casilla(mazo, "Sorpresa2"));
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle6", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle4", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle5", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaSorpresa(mazo, "Sorpresa2"));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle6", 10, 1.1f, 500, 600, 250)));
         tablero.añadeCasilla(new Casilla("PARKING"));
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle7", 10, 1.1f, 500, 600, 250)));
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle8", 10, 1.1f, 500, 600, 250)));
-        tablero.añadeCasilla(new Casilla(mazo, "Sorpresa3"));
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle9", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle7", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle8", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaSorpresa(mazo, "Sorpresa3"));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle9", 10, 1.1f, 500, 600, 250)));
         tablero.añadeJuez();
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle10", 10, 1.1f, 500, 600, 250)));
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle11", 10, 1.1f, 500, 600, 250)));
-        tablero.añadeCasilla(new Casilla(10, "IMPUESTO"));
-        tablero.añadeCasilla(new Casilla(new TituloPropiedad("Calle12", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle10", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle11", 10, 1.1f, 500, 600, 250)));
+        tablero.añadeCasilla(new CasillaImpuesto(10, "IMPUESTO"));
+        tablero.añadeCasilla(new CasillaCalle(new TituloPropiedad("Calle12", 10, 1.1f, 500, 600, 250)));
     }
     
     /**

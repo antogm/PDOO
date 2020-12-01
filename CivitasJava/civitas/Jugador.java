@@ -17,7 +17,7 @@ public class Jugador implements Comparable<Jugador>{
     private float saldo;
     private float SaldoInicial = 7500;
     ArrayList<TituloPropiedad> propiedades;
-    Sorpresa salvoconducto;
+    SorpresaSalirCarcel salvoconducto;
     
     // Métodos
     boolean cancelarHipoteca(int ip){
@@ -132,7 +132,7 @@ public class Jugador implements Comparable<Jugador>{
     protected boolean debeSerEncarcelado(){
         if (encarcelado)
             return false;
-        else if ( !tieneSalvoConducto())
+        else if (!tieneSalvoConducto())
             return true;
         
         perderSalvoconducto();
@@ -255,20 +255,20 @@ public class Jugador implements Comparable<Jugador>{
     }
     
     boolean hipotecar (int ip){
-		boolean result = false;
+	boolean result = false;
 		
-		if (encarcelado)
-			return result;
+	if (encarcelado)
+            return result;
 		
-		if (existeLaPropiedad(ip)){
-			TituloPropiedad propiedad = propiedades.get(ip);
-			result = propiedad.hipotecar(this);
-		}
+        if (existeLaPropiedad(ip)){
+            TituloPropiedad propiedad = propiedades.get(ip);
+            result = propiedad.hipotecar(this);
+        }
 		
-		if (result)
-			Diario.getInstance().ocurreEvento("El jugador " + nombre + " hupoteca la propiedad " + ip);
+	if (result)
+            Diario.getInstance().ocurreEvento("El jugador " + nombre + " hupoteca la propiedad " + ip);
 		
-		return result;
+        return result;
     }
     
     /**
@@ -341,7 +341,7 @@ public class Jugador implements Comparable<Jugador>{
      * @param sorpresa salvoconducto
      * @return true si la operación ha tenido éxito
      */
-    boolean obtenerSalvoconducto (Sorpresa sorpresa){
+    boolean obtenerSalvoconducto (SorpresaSalirCarcel sorpresa){
         if (encarcelado)
             return false;
         else{
@@ -431,12 +431,12 @@ public class Jugador implements Comparable<Jugador>{
     private boolean puedoEdificarCasa (TituloPropiedad propiedad){
         boolean puedoEdificar = false;
 		
-		float precio = propiedad.getPrecioEdificar();
+	float precio = propiedad.getPrecioEdificar();
 		
-		if (puedoGastar(precio) && (propiedad.getNumCasas() < CasasMax))
+	if (puedoGastar(precio) && (propiedad.getNumCasas() < CasasMax))
             puedoEdificar = true;
 			
-		return puedoEdificar;
+	return puedoEdificar;
     }
     
     /**
@@ -446,12 +446,12 @@ public class Jugador implements Comparable<Jugador>{
      */
     private boolean puedoEdificarHotel (TituloPropiedad propiedad){
         boolean puedoEdificarHotel = false;
-		float precio = propiedad.getPrecioEdificar();
+	float precio = propiedad.getPrecioEdificar();
 		
-		if (puedoGastar(precio) && propiedad.getNumHoteles() < HotelesMax && propiedad.getNumCasas() >= CasasPorHotel)
+	if (puedoGastar(precio) && propiedad.getNumHoteles() < HotelesMax && propiedad.getNumCasas() >= CasasPorHotel)
             puedoEdificarHotel = true;
         
-		return puedoEdificarHotel;
+	return puedoEdificarHotel;
     }
     
     /**

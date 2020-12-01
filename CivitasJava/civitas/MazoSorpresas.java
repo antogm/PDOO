@@ -34,12 +34,12 @@ public class MazoSorpresas {
             Diario.getInstance().ocurreEvento("Se ha activado el modo debug del MazoSorpresas");
     }
     
-    void alMazo (Sorpresa s){
+    void alMazo(Sorpresa s){
         if (!barajada)
             sorpresas.add(s);
     }
     
-    Sorpresa siguiente (){
+    Sorpresa siguiente(){
         if ( (!barajada || usadas == sorpresas.size() ) && !debug){
             Collections.shuffle(sorpresas, new Random());
             usadas = 0;
@@ -54,7 +54,7 @@ public class MazoSorpresas {
         return ultimaSorpresa;
     }
     
-    void inhabilitarCartaEspecial (Sorpresa sorpresa){
+    void inhabilitarCartaEspecial(Sorpresa sorpresa){
         int i = sorpresas.indexOf(sorpresa);
         if (i != -1){
             sorpresas.remove(i);
@@ -63,7 +63,7 @@ public class MazoSorpresas {
         };
     }
     
-    void habilitarCartaEspecial (Sorpresa sorpresa){
+    void habilitarCartaEspecial(Sorpresa sorpresa){
         int i = cartasEspeciales.indexOf(sorpresa);
         
         if (i != -1){
