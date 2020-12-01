@@ -287,7 +287,7 @@ public class TituloPropiedad {
      */
     boolean vender (Jugador jugador){
         boolean salida = false;
-        System.out.println("\n\nTEST Vendiendo titulo\n\n");
+
         if (esEsteElPropietario(jugador) && !hipotecado){
             jugador.recibe( getPrecioVenta() );
             propietario = null;

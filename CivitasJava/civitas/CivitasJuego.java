@@ -2,6 +2,8 @@ package civitas;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CivitasJuego {
     
@@ -23,7 +25,9 @@ public class CivitasJuego {
 	Casilla casilla = tablero.getCasilla(posicionNueva);
 	this.contabilizarPasosPorSalida(jugadorActual);
 	jugadorActual.moverACasilla(posicionNueva);
-	casilla.recibeJugador(indiceJugadorActual, jugadores);
+        try {
+            casilla.recibeJugador(indiceJugadorActual, jugadores);
+        } catch (Exception ex){}
 	this.contabilizarPasosPorSalida(jugadorActual);
     }
     

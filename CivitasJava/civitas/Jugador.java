@@ -63,25 +63,25 @@ public class Jugador implements Comparable<Jugador>{
     boolean comprar (TituloPropiedad titulo){
         boolean result = false;
 		
-		if (encarcelado)
-			return result;
-		
-		if (puedeComprar){
-			float precio = titulo.getPrecioCompra();
+	if (encarcelado)
+            return result;
+	
+	if (puedeComprar){
+            float precio = titulo.getPrecioCompra();
 			
-			if (puedoGastar(precio)){
-				result = titulo.comprar(this);
-				
-				if (result){
-					propiedades.add(titulo);
-					String evento = "El jugador " + this + " compra la propiedad " + titulo.toString();
-					Diario.getInstance().ocurreEvento(evento);
-					puedeComprar = false;
-				}
-			}
+            if (puedoGastar(precio)){
+                result = titulo.comprar(this);
+			
+		if (result){
+                    propiedades.add(titulo);
+                    String evento = "El jugador " + this + " compra la propiedad " + titulo.toString();
+                    Diario.getInstance().ocurreEvento(evento);
+                    puedeComprar = false;
 		}
-		
-		return result;
+            }
+	}
+        
+	return result;
     }
     
     boolean construirCasa (int ip){
@@ -107,22 +107,22 @@ public class Jugador implements Comparable<Jugador>{
     boolean construirHotel (int ip){
         boolean result = false;
 		
-		if (encarcelado)
-			return result;
+	if (encarcelado)
+            return result;
 		
-		if (existeLaPropiedad(ip)){
-			TituloPropiedad propiedad = propiedades.get(ip);
-			boolean puedoEdificarHotel = this.puedoEdificarHotel(propiedad);
+	if (existeLaPropiedad(ip)){
+            TituloPropiedad propiedad = propiedades.get(ip);
+            boolean puedoEdificarHotel = this.puedoEdificarHotel(propiedad);
 			
-			if (puedoEdificarHotel){
-				result = propiedad.construirHotel(this);
-				int casasPorHotel = getCasasPorHotel();
-				propiedad.derruirCasas(casasPorHotel, this);
-				Diario.getInstance().ocurreEvento("El jugador " + nombre + " construye hotel en la propiedad " + ip);
-			}
-		}
+            if (puedoEdificarHotel){
+                result = propiedad.construirHotel(this);
+		int casasPorHotel = getCasasPorHotel();
+		propiedad.derruirCasas(casasPorHotel, this);
+		Diario.getInstance().ocurreEvento("El jugador " + nombre + " construye hotel en la propiedad " + ip);
+            }
+	}
 		
-		return result;
+	return result;
     }
     
     /**
