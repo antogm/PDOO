@@ -2,6 +2,7 @@ package juegoTexto;
 
 import civitas.CivitasJuego;
 import civitas.Dado;
+import civitas.Jugador;
 import java.util.ArrayList;
 
 public class TestP3 {

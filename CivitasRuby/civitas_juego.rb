@@ -4,12 +4,21 @@ module Civitas
 require_relative 'gestor_estados'  
 require_relative 'jugador'
 require_relative 'mazo_sorpresas'
-require_relative 'tipo_sorpresa'
 require_relative 'sorpresa'
 require_relative 'dado'
 require_relative 'tablero'
 require_relative 'titulo_propiedad'
 require_relative 'operaciones_juego'
+require_relative 'casilla_calle'
+require_relative 'casilla_impuesto'
+require_relative 'casilla_juez'
+require_relative 'casilla_sorpresa'
+require_relative 'sorpresa_ir_carcel'
+require_relative 'sorpresa_ir_casilla'
+require_relative 'sorpresa_pagar_cobrar'
+require_relative 'sorpresa_por_casa_hotel'
+require_relative 'sorpresa_por_jugador'
+require_relative 'sorpresa_salir_carcel'
   
 class CivitasJuego
   
@@ -95,41 +104,41 @@ class CivitasJuego
   end
   
   def inicializar_mazo_sorpresas(tablero)
-    @mazo.al_mazo( Sorpresa.new_IRCARCEL( TipoSorpresa::IRCARCEL, tablero) )
-    @mazo.al_mazo( Sorpresa.new_SALIRCARCEL(TipoSorpresa::SALIRCARCEL, @mazo) )
-    @mazo.al_mazo( Sorpresa.new_resto(TipoSorpresa::PORJUGADOR, -300, "PAGAR_PORJUGADOR_1") )
-    @mazo.al_mazo( Sorpresa.new_resto( TipoSorpresa::PORJUGADOR, 300, "COBRAR_PORJUGADOR_1" ) )
-    @mazo.al_mazo( Sorpresa.new_IRCASILLA(TipoSorpresa::IRCASILLA, tablero, 9, "IRCASILLA_9"))
-    @mazo.al_mazo( Sorpresa.new_IRCASILLA(TipoSorpresa::IRCASILLA, tablero, 19, "IRCASILLA_19"))
-    @mazo.al_mazo( Sorpresa.new_resto(TipoSorpresa::PORCASAHOTEL, -100, "PAGAR_PORCASAHOTEL_1") )
-    @mazo.al_mazo( Sorpresa.new_resto(TipoSorpresa::PORCASAHOTEL, 100, "COBRAR_PORCASAHOTEL_1") )
-    @mazo.al_mazo( Sorpresa.new_resto(TipoSorpresa::PAGARCOBRAR, 500, "COBRAR_1") )
-    @mazo.al_mazo( Sorpresa.new_resto(TipoSorpresa::PAGARCOBRAR, -500, "PAGAR_1") )
+    @mazo.al_mazo( SorpresaIrCarcel.new(tablero, tablero.numCasillaCarcel, "Ir a la carcel") )
+    @mazo.al_mazo( SorpresaSalirCarcel.new(@mazo, "Salvoconducto") )
+    @mazo.al_mazo( SorpresaPorJugador.new( -300, "Pagas 300 a cada jugador") )
+    @mazo.al_mazo( SorpresaPorJugador.new( 300, "Cobras 300 por cada jugador" ) )
+    @mazo.al_mazo( SorpresaIrCasilla.new(tablero, 9, "Ir a la casilla 9"))
+    @mazo.al_mazo( SorpresaIrCasilla.new(tablero, 19, "Ir a la casilla 19"))
+    @mazo.al_mazo( SorpresaPorCasaHotel.new(-100, "Pagas 100 por cada casas u hotel de tu propiedad") )
+    @mazo.al_mazo( SorpresaPorCasaHotel.new(100, "Cobras 100 por cada casa u hotel de tu propiedad") )
+    @mazo.al_mazo( SorpresaPagarCobrar.new(500, "Cobras 500") )
+    @mazo.al_mazo( SorpresaPagarCobrar.new(-500, "Pagas 500") )
   end
   
   def inicializar_tablero(mazo)
     num_casilla_carcel = 5
     @tablero = Tablero.new(num_casilla_carcel)
     
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle1", 10, 1.1, 500, 600, 250)) )
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle2", 10, 1.1, 500, 600, 250)) )
-    @tablero.añade_casilla( Casilla.new_SORPRESA(mazo, "Sorpresa1"))
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle3", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle1", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle2", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaSorpresa.new(mazo, "Sorpresa1"))
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle3", 10, 1.1, 500, 600, 250)) )
     #Cárcel
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle4", 10, 1.1, 500, 600, 250)) )
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle5", 10, 1.1, 500, 600, 250)) )
-    @tablero.añade_casilla( Casilla.new_SORPRESA(mazo, "Sorpresa2"))
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle6", 10, 1.1, 500, 600, 250)) )
-    @tablero.añade_casilla( Casilla.new_DESCANSO("PARKING") )
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle7", 10, 1.1, 500, 600, 250)) )
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle8", 10, 1.1, 500, 600, 250)) )
-    @tablero.añade_casilla( Casilla.new_SORPRESA(mazo, "Sorpresa3"))
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle9", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle4", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle5", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaSorpresa.new(mazo, "Sorpresa2"))
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle6", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( Casilla.new("PARKING") )
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle7", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle8", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaSorpresa.new(mazo, "Sorpresa3"))
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle9", 10, 1.1, 500, 600, 250)) )
     @tablero.añade_juez
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle10", 10, 1.1, 500, 600, 250)) )
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle11", 10, 1.1, 500, 600, 250)) )
-    @tablero.añade_casilla( Casilla.new_IMPUESTO(10, "IMPUESTO") )
-    @tablero.añade_casilla( Casilla.new_CALLE(TituloPropiedad.new("Calle12", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle10", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle11", 10, 1.1, 500, 600, 250)) )
+    @tablero.añade_casilla( CasillaImpuesto.new(10, "IMPUESTO") )
+    @tablero.añade_casilla( CasillaCalle.new(TituloPropiedad.new("Calle12", 10, 1.1, 500, 600, 250)) )
   end
   
   def pasar_turno

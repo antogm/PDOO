@@ -178,7 +178,7 @@ public class Jugador implements Comparable<Jugador>{
      * Consultor para el atributo CasasMax
      * @return int número máximo de casas
      */
-    private int getCasasMax(){
+    int getCasasMax(){
         return CasasMax;
     }
     
@@ -194,7 +194,7 @@ public class Jugador implements Comparable<Jugador>{
      * Consultor para el atributo HotelesMax
      * @return int número máximo de hoteles
      */
-    private int getHotelesMax(){
+    int getHotelesMax(){
         return HotelesMax;
     }
     
@@ -459,7 +459,7 @@ public class Jugador implements Comparable<Jugador>{
      * @param precio cantidad a gastar
      * @return true si el saldo es mayor o igual que la cantidad establecida
      */
-    private boolean puedoGastar (float precio){
+    protected boolean puedoGastar (float precio){
         if (isEncarcelado() )
             return false;
         else          

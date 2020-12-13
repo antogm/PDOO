@@ -11,8 +11,8 @@ class Jugador
   @@PrecioLibertad = 200
   @@SaldoInicial = 7500
   
-  def self.new_copia(otro_jugador)
-    new(otro_jugador.nombre)
+  def copia(otro_jugador)
+    @nombre = otro_jugador.nombre
     @encarcelado = otro_jugador.encarcelado
     @numCasillaActual = otro_jugador.numCasillaActual
     @puedeComprar = otro_jugador.puedeComprar
@@ -332,7 +332,7 @@ class Jugador
   end
   
   def to_string
-	str = "Nombre del jugador " + nombre + ", saldo " + saldo + ", está en la casilla " + numCasillaActual
+	str = "Nombre del jugador " + @nombre + ", saldo " + @saldo + ", está en la casilla " + @numCasillaActual
 	return str
   end
   

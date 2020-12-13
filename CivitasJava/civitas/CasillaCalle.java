@@ -24,7 +24,7 @@ public class CasillaCalle extends Casilla {
             Jugador jugador = todos.get(iactual);
               
             if (!tituloPropiedad.tienePropietario()){
-		jugador.puedeComprarCasilla();
+		        jugador.puedeComprarCasilla();
             }else{
                 tituloPropiedad.tramitarAlquiler(jugador);
             };
