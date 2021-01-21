@@ -1,6 +1,7 @@
 package civitas;
 
 import java.util.ArrayList;
+import GUI.Dado;
 
 public class Jugador implements Comparable<Jugador>{
     
@@ -202,7 +203,7 @@ public class Jugador implements Comparable<Jugador>{
      * Consultor para el atributo nombre
      * @return String nombre del jugador
      */
-    protected String getNombre(){
+    public String getNombre(){
         return nombre;
     }
     
@@ -250,7 +251,7 @@ public class Jugador implements Comparable<Jugador>{
      * Consultor para el atributo saldo
      * @return float saldo del jugador
      */
-    protected float getSaldo(){
+    public float getSaldo(){
         return saldo;
     }
     

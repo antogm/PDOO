@@ -28,13 +28,13 @@ public class TituloPropiedad {
     boolean cancelarHipoteca (Jugador jugador){
         boolean result = false;
 		
-		if (hipotecado && this.esEsteElPropietario(jugador)){
-			jugador.paga(this.getImporteCancelarHipoteca());
-			hipotecado = false;
-			result = true;
-		}
+	if (hipotecado && this.esEsteElPropietario(jugador)){
+            jugador.paga(this.getImporteCancelarHipoteca());
+            hipotecado = false;
+            result = true;
+	}
 		
-		return result;
+	return result;
     }
 
     /**
@@ -48,19 +48,19 @@ public class TituloPropiedad {
     boolean comprar (Jugador jugador){
         boolean result = false;
 		
-		if (!tienePropietario()){
-			propietario = jugador;
-			result = true;
-			propietario.paga(precioCompra);
-		}
+	if (!tienePropietario()){
+            propietario = jugador;
+            result = true;
+            propietario.paga(precioCompra);
+	}
 		
-		return result;
+	return result;
     }
 
     boolean construirCasa (Jugador jugador){
         boolean result = false;
 		
-		if (!hipotecado && tienePropietario()) {
+	if (!hipotecado && tienePropietario()) {
             numCasas++;
             result = true;
         }
@@ -143,7 +143,7 @@ public class TituloPropiedad {
      * Consultor para el atributo numCasas
      * @return int número de casas de la propiedad 
      */
-    int getNumCasas(){
+    public int getNumCasas(){
         return numCasas;
     }
     
@@ -151,7 +151,7 @@ public class TituloPropiedad {
      * Consultor para el atributo numHoteles
      * @return int número de hoteles de la propiedad 
      */
-    int getNumHoteles(){
+    public int getNumHoteles(){
         return numHoteles;
     }
     
@@ -159,7 +159,7 @@ public class TituloPropiedad {
      * Devuelve el precio de alquiler de la propiedad para los jugadores que caigan en ella
      * @return 0 si la propiedad está hipotecada o el propietario encarcelado, float mayor que 0 en otro caso
      */
-    private float getPrecioAlquiler (){
+    public float getPrecioAlquiler (){
         if ( propietarioEncarcelado() || hipotecado )
             return 0;
         else

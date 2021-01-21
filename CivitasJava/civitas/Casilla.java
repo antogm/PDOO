@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Casilla {
     
     // Atributos
-    private String nombre;
+    protected String nombre;
     
     /**
      * Constructor
@@ -40,6 +40,6 @@ public class Casilla {
 
     @Override
     public String toString(){
-        return nombre;
+        return "Casilla " + nombre;
     }
 }

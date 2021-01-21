@@ -1,4 +1,4 @@
-package juegoTexto;
+package GUI;
 
 import java.util.ArrayList;
 import civitas.CivitasJuego;
@@ -11,24 +11,24 @@ import civitas.Jugador;
 
 public class Controlador {
 	private CivitasJuego juego;
-	private VistaTextual vista;
-	
-	Controlador(CivitasJuego _juego, VistaTextual _vista){
-        juego = _juego;
-        vista = _vista;
-	}
+	private CivitasView vista;
 
+        Controlador(CivitasJuego _juego, CivitasView _vista){
+            juego = _juego;
+            vista = _vista;
+        }
+        
 	void juega(){
         vista.setCivitasJuego(juego);
 
         while (!juego.finalDelJuego()){
             vista.actualizarVista();
-		    vista.pausa();
-		    OperacionesJuego siguienteOperacion = juego.siguientePaso();
-		
+            OperacionesJuego siguienteOperacion = juego.siguientePaso();
+            vista.mostrarSiguienteOperacion(siguienteOperacion);
+            
             if (siguienteOperacion != OperacionesJuego.PASAR_TURNO){
                 vista.mostrarEventos();
-		    }
+            }
 
             if (!juego.finalDelJuego()){
                 switch(siguienteOperacion){
@@ -38,11 +38,11 @@ public class Controlador {
 
                         juego.siguientePasoCompletado(siguienteOperacion);
                         break;
-
+                    
                     case GESTIONAR:
                         vista.gestionar();
-                        int iGestion = vista.getGestion();
-                        int ip = vista.getPropiedad();
+                        int iGestion = vista.getGestionElegida();
+                        int ip = vista.getPropiedadElegida();
                         GestionesInmobiliarias gestion = GestionesInmobiliarias.values()[iGestion];
                         OperacionInmobiliaria operacion = new OperacionInmobiliaria(gestion, ip);
                                 
@@ -84,7 +84,7 @@ public class Controlador {
                         
                         juego.siguientePasoCompletado(siguienteOperacion);
                         break;
-                                
+                      
                     default: break;
                 }
             }

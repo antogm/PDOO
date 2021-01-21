@@ -30,4 +30,9 @@ public class CasillaCalle extends Casilla {
             };
         };
     };
+    
+    @Override
+    public String toString(){
+      return nombre + ", titulo propiedad: " + tituloPropiedad.getNombre() + ", alquiler: " + tituloPropiedad.getPrecioAlquiler();
+    };
 };
